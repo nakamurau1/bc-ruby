@@ -19,10 +19,50 @@ class Blockchain
     @chain.last
   end
 
-  def add_transaction(transaction)
-    if transaction.sender.nil? || transaction.receiver.nil? || transaction.amount <= 0
-      raise 'Invalid transaction'
+  # 残高を計算するメソッド
+  def get_balance(address)
+    balance = 0
+    @chain.each do |block|
+      block.transactions.each do |tx|
+        if tx.sender == address
+          balance -= tx.amount
+        end
+        if tx.receiver == address
+          balance += tx.amount
+        end
+      end
     end
+    @pending_transactions.each do |tx|
+      if tx.sender == address
+        balance -= tx.amount
+      end
+      if tx.receiver == address
+        balance += tx.amount
+      end
+    end
+    balance
+  end
+
+  def add_transaction(transaction)
+    if transaction.sender.nil? && transaction.receiver.nil?
+      raise 'Invalid transaction: Both sender and receiver cannot be nil'
+    end
+
+    if transaction.receiver.nil?
+      raise 'Invalid transaction: Receiver cannot be nil'
+    end
+
+    if transaction.amount <= 0
+      raise 'Invalid transaction: Amount must be greater than zero'
+    end
+
+    # 送信者がnilでない（マイニング報酬ではない）場合に残高を確認
+    if transaction.sender
+      if get_balance(transaction.sender) < transaction.amount
+        raise 'Insufficient balance'
+      end
+    end
+
     @pending_transactions << transaction
   end
 
@@ -37,21 +77,6 @@ class Blockchain
 
     # ペンディングトランザクションをリセット
     @pending_transactions = []
-  end
-
-  def get_balance(address)
-    balance = 0
-    @chain.each do |block|
-      block.transactions.each do |tx|
-        if tx.sender == address
-          balance -= tx.amount
-        end
-        if tx.receiver == address
-          balance += tx.amount
-        end
-      end
-    end
-    balance
   end
 
   def is_chain_valid
