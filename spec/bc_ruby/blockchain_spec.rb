@@ -1,6 +1,3 @@
-require_relative '../blockchain'
-require_relative '../transaction'
-
 RSpec.describe Blockchain do
   before(:each) do
     @blockchain = Blockchain.new

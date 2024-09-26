@@ -1,6 +1,3 @@
-require_relative '../block'
-require_relative '../transaction'
-
 RSpec.describe Block do
   describe '#initialize' do
     it '正しく初期化されること' do

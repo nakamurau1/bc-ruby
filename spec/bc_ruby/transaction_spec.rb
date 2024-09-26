@@ -1,5 +1,3 @@
-require_relative '../transaction'
-
 RSpec.describe Transaction do
   describe '#initialize' do
     it '正しく初期化されること' do

@@ -1,5 +1,6 @@
-require_relative 'blockchain'
-require_relative 'transaction'
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+
+require 'bc_ruby'
 
 # Initialize blockchain
 bitcoin = Blockchain.new
