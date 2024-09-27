@@ -51,7 +51,7 @@ RSpec.describe Blockchain do
       end
 
       it '送信者の残高が不足している場合は拒否すること' do
-        tx = Transaction.new('Alice', 'Bob', 50) # Alice の初期残高は 0
+        tx = Transaction.new('Miner1', 'Bob', 101) # Miner1 の初期残高は 100
         expect { @blockchain.add_transaction(tx) }.to raise_error('Insufficient balance')
         expect(@blockchain.pending_transactions).to_not include(tx)
       end
